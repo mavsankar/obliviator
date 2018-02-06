@@ -1,0 +1,1598 @@
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| COMPANY            |
+| INSTITUTE          |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use COMPANY
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables
+    -> ;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| EMPLOYEE          |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> desc EMLOYEE;
+ERROR 1146 (42S02): Table 'COMPANY.EMLOYEE' doesn't exist
+mysql> desc EMPLOYEE;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| Fname    | varchar(15)   | NO   |     | NULL    |       |
+| Mname    | varchar(15)   | YES  |     | NULL    |       |
+| Lname    | varchar(15)   | NO   |     | NULL    |       |
+| Ssn      | char(9)       | YES  |     | NULL    |       |
+| Bdate    | date          | YES  |     | NULL    |       |
+| Address  | varchar(50)   | YES  |     | NULL    |       |
+| Gender   | char(1)       | YES  |     | NULL    |       |
+| Salary   | decimal(10,2) | YES  |     | NULL    |       |
+| Superssn | char(9)       | YES  |     | NULL    |       |
+| Dno      | int(11)       | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> select * from EMPLOYEE;
+Empty set (0.00 sec)
+
+mysql> insert into EMPLOYEE values('Anjani','Sankar','Mantriprada','1','24-11-1998','Hyderabad','M',2000000,'5',1),('Sudheer','babu','manukonda','2','12-03-1998','Tanuku','M',5000000,'5',1),('Kaushik','mithai','Betanabotla','3','26-04-1997','Hyderabad','M',10000,'7',2),('Pavan','Chaithanya','Thatavarthy','4','28-03-1999','Kavali','M',9000000,'5',1),('Uzumaki','Naruto','kun','5','10-10-1997','Konohagakure','M',100000,'7',3),('Aneesh','Dinesh','Hiregange','6','15-12-1998','Kaiga','M',9000000,'5',1);
+ERROR 1292 (22007): Incorrect date value: '24-11-1998' for column 'Bdate' at row 1
+mysql> insert into EMPLOYEE values('Anjani','Sankar','Mantriprada','1','1998-11-24','Hyderabad','M',2000000,'5',1),('Sudheer','babu','manukonda','2','1998-03-12','Tanuku','M',5000000,'5',1),('Kaushik','mithai','Betanabotla','3','1997-04-24','Hyderabad','M',10000,'7',2),('Pavan','Chaithanya','Thatavarthy','4','1999-05-28','Kavali','M',9000000,'5',1),('Uzumaki','Naruto','kun','5','1997-10-10','Konohagakure','M',100000,'7',3),('Aneesh','Dinesh','Hiregange','6','1998-12-15','Kaiga','M',9000000,'5',1);
+Query OK, 6 rows affected (0.31 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from EMPLOYEE
+    -> ;
++---------+------------+-------------+------+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname       | Ssn  | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+-------------+------+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantriprada | 1    | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Sudheer | babu       | manukonda   | 2    | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla | 3    | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy | 4    | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun         | 5    | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh  | Dinesh     | Hiregange   | 6    | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
++---------+------------+-------------+------+------------+--------------+--------+------------+----------+-----+
+6 rows in set (0.00 sec)
+
+mysql> desc EMPLOYEE;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| Fname    | varchar(15)   | NO   |     | NULL    |       |
+| Mname    | varchar(15)   | YES  |     | NULL    |       |
+| Lname    | varchar(15)   | NO   |     | NULL    |       |
+| Ssn      | char(9)       | YES  |     | NULL    |       |
+| Bdate    | date          | YES  |     | NULL    |       |
+| Address  | varchar(50)   | YES  |     | NULL    |       |
+| Gender   | char(1)       | YES  |     | NULL    |       |
+| Salary   | decimal(10,2) | YES  |     | NULL    |       |
+| Superssn | char(9)       | YES  |     | NULL    |       |
+| Dno      | int(11)       | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> alter table EMPLOYEE add constraint ssnpk primary key(Ssn); 
+Query OK, 0 rows affected (0.66 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc EMPLOYEE;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| Fname    | varchar(15)   | NO   |     | NULL    |       |
+| Mname    | varchar(15)   | YES  |     | NULL    |       |
+| Lname    | varchar(15)   | NO   |     | NULL    |       |
+| Ssn      | char(9)       | NO   | PRI | NULL    |       |
+| Bdate    | date          | YES  |     | NULL    |       |
+| Address  | varchar(50)   | YES  |     | NULL    |       |
+| Gender   | char(1)       | YES  |     | NULL    |       |
+| Salary   | decimal(10,2) | YES  |     | NULL    |       |
+| Superssn | char(9)       | YES  |     | NULL    |       |
+| Dno      | int(11)       | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> alter table EMPLOYEE add constraint superssnfk primary key(Superssn) references EMPLOYEE(Ssn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'references EMPLOYEE(Ssn)' at line 1
+mysql> alter table EMPLOYEE add constraint superssnfk foreign key(Superssn) references EMPLOYEE(Ssn);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`COMPANY`.`#sql-14a1_7`, CONSTRAINT `superssnfk` FOREIGN KEY (`Superssn`) REFERENCES `EMPLOYEE` (`Ssn`))
+mysql> desc EMPLOYEE;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| Fname    | varchar(15)   | NO   |     | NULL    |       |
+| Mname    | varchar(15)   | YES  |     | NULL    |       |
+| Lname    | varchar(15)   | NO   |     | NULL    |       |
+| Ssn      | char(9)       | NO   | PRI | NULL    |       |
+| Bdate    | date          | YES  |     | NULL    |       |
+| Address  | varchar(50)   | YES  |     | NULL    |       |
+| Gender   | char(1)       | YES  |     | NULL    |       |
+| Salary   | decimal(10,2) | YES  |     | NULL    |       |
+| Superssn | char(9)       | YES  |     | NULL    |       |
+| Dno      | int(11)       | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> alter table EMPLOYEE add constraint superssnfk foreign key(Superssn) references EMPLOYEE(Ssn);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`COMPANY`.`#sql-14a1_7`, CONSTRAINT `superssnfk` FOREIGN KEY (`Superssn`) REFERENCES `EMPLOYEE` (`Ssn`))
+mysql> select * from EMPLOYEE
+    -> ;
++---------+------------+-------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname       | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+-------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantriprada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Sudheer | babu       | manukonda   | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun         | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh  | Dinesh     | Hiregange   | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
++---------+------------+-------------+-----+------------+--------------+--------+------------+----------+-----+
+6 rows in set (0.00 sec)
+
+mysql> insert into EMPLOYEE values('Sai','Phani','Vallabhaneni','7','1998-08-08','Warangal','M','7',1);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into EMPLOYEE values('Sai','Phani','Vallabhaneni','7','1998-08-08','Warangal','M',900000,'7',1);
+Query OK, 1 row affected (0.32 sec)
+
+mysql> alter table EMPLOYEE add constraint superssnfk foreign key(Superssn) references EMPLOYEE(Ssn);
+Query OK, 7 rows affected (0.90 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> desc EMPLOYEE;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| Fname    | varchar(15)   | NO   |     | NULL    |       |
+| Mname    | varchar(15)   | YES  |     | NULL    |       |
+| Lname    | varchar(15)   | NO   |     | NULL    |       |
+| Ssn      | char(9)       | NO   | PRI | NULL    |       |
+| Bdate    | date          | YES  |     | NULL    |       |
+| Address  | varchar(50)   | YES  |     | NULL    |       |
+| Gender   | char(1)       | YES  |     | NULL    |       |
+| Salary   | decimal(10,2) | YES  |     | NULL    |       |
+| Superssn | char(9)       | YES  | MUL | NULL    |       |
+| Dno      | int(11)       | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+10 rows in set (0.01 sec)
+
+mysql> create table DEPT(Dname varchar(20) not null,Dnumber int not null,Mgrssn char(9) not null, mgrstartdate date);
+Query OK, 0 rows affected (0.53 sec)
+
+mysql> ^C
+mysql> show tables
+    -> ;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| DEPT              |
+| EMPLOYEE          |
++-------------------+
+2 rows in set (0.00 sec)
+
+mysql> use COMPANY;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> select * from DEPT;
+Empty set (0.00 sec)
+
+mysql> desc DEPT;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| Dname        | varchar(20) | NO   |     | NULL    |       |
+| Dnumber      | int(11)     | NO   |     | NULL    |       |
+| Mgrssn       | char(9)     | NO   |     | NULL    |       |
+| mgrstartdate | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into DEPT values('')
+    -> c;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'c' at line 2
+mysql> insert into DEPT values('Computer Engineering',1,'6','2016-01-01'),('Electronics DM',2,'3','2003-02-03'),('Mechanical DM',3,'5','2017-10-10');
+Query OK, 3 rows affected (0.32 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> alter table DEPT add constraint dnumberpk primary key(Dnumber);
+Query OK, 0 rows affected (0.65 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table DEPT add constraint mgrssnfk foreign key(Mgrssn) references EMPLOYEE(Ssn);
+Query OK, 3 rows affected (0.90 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> desc DEPT;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| Dname        | varchar(20) | NO   |     | NULL    |       |
+| Dnumber      | int(11)     | NO   | PRI | NULL    |       |
+| Mgrssn       | char(9)     | NO   | MUL | NULL    |       |
+| mgrstartdate | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE TABLE
+    -> DEPT_LOCATIONS
+    -> (
+    -> Dnumber
+    -> INT
+    -> NOT NULL
+    -> ,
+    -> Dlocation
+    -> VARCHAR
+    -> (
+    -> 15
+    -> )
+    -> NOT NULL
+    -> ,
+    -> PRIMARY KEY 
+    -> (
+    -> Dnumber
+    -> ,
+    -> Dlocation
+    -> )
+    -> ,
+    -> FOREIGN KEY 
+    -> (
+    -> Dnumber
+    -> )
+    -> REFERENCES
+    -> DEPARTMENT
+    -> (
+    -> Dnumber
+    -> ))
+    -> ;
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> CREATE TABLE DEPT_LOCATIONS ( Dnumber INT NOT NULL , Dlocation VARCHAR ( 15 ) NOT NULL );
+Query OK, 0 rows affected (0.33 sec)
+
+mysql> insert into DEPT_LOCATIONS values(1,'Chennai'),(1,'Hyderabad'),(2,'Chennai'),(2,'Bangalore'),(3,'Bangalore');
+Query OK, 5 rows affected (0.12 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> alter table DEPT_LOCATIONS add constraint dnumberlocpk primary key(Dnumber,Dlocation);
+Query OK, 0 rows affected (0.88 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table DEPT_LOCATIONS add constraint dnumberfk foreign key(Dnumber) references DEPT(Dnumber);
+Query OK, 5 rows affected (0.80 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> create table PROJECT(Pname varchar(50) not null,Pnumber int not null,Plocation varchar(20),Dnum int not null);
+Query OK, 0 rows affected (0.39 sec)
+
+mysql> alter table PROJECT add constraint pnumberpk primary key(Pnumber);
+Query OK, 0 rows affected (0.64 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into PROJECT values('Samgatha Webops',1,'Chennai',1);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> alter table PROJECT add constraint dnumfk foreign key(Dnum) references Dept(Dnumber);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> desc Dept;
+ERROR 1146 (42S02): Table 'COMPANY.Dept' doesn't exist
+mysql> alter table PROJECT add constraint dnumfk foreign key(Dnum) references DEPT(Dnumber);
+Query OK, 1 row affected (0.83 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> insert into PROJECT values('Processor logic making',2,'Beijing',2),('Optimization of iv-tech engines',3,'Hyderabad',3);
+Query OK, 2 rows affected (0.34 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> create table WORKS_ON(Essn char(9) not null,Pno int not null,Hours Decimal(3,1) not null);
+ERROR 1046 (3D000): No database selected
+mysql> use COMPANY;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> create table WORKS_ON(Essn char(9) not null,Pno int not null,Hours Decimal(3,1) not null);
+Query OK, 0 rows affected (0.39 sec)
+
+mysql> insert into WORKS_ON values('1',1,08.2);
+Query OK, 1 row affected (0.35 sec)
+
+mysql> mysql> select * from WORKS_ON
+    -> ;
++------+-----+-------+
+| Essn | Pno | Hours |
++------+-----+-------+
+| 1    |   1 |   8.2 |
++------+-----+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into WORKS_ON values('2',1,08.0);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into WORKS_ON values('3',2,05.0),('4',1,2.5),('5',3,9.0);
+Query OK, 3 rows affected (0.10 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from WORKS_ON
+    -> ;
++------+-----+-------+
+| Essn | Pno | Hours |
++------+-----+-------+
+| 1    |   1 |   8.2 |
+| 2    |   1 |   8.0 |
+| 3    |   2 |   5.0 |
+| 4    |   1 |   2.5 |
+| 5    |   3 |   9.0 |
++------+-----+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc WORKS_ON;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| Essn  | char(9)      | NO   |     | NULL    |       |
+| Pno   | int(11)      | NO   |     | NULL    |       |
+| Hours | decimal(3,1) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table WORKS_ON add constraint essnpnopk primary key(Essn,Pno);
+Query OK, 0 rows affected (0.64 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc WORKS_ON;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| Essn  | char(9)      | NO   | PRI | NULL    |       |
+| Pno   | int(11)      | NO   | PRI | NULL    |       |
+| Hours | decimal(3,1) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> alter table WORKS_ON add constraint essnfk foreign key(Essn) references Employee(Ssn);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> alter table WORKS_ON add constraint essnfk foreign key(Essn) references EMPLOYEE(Ssn);
+Query OK, 5 rows affected (0.85 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> alter table WORKS_ON add constraint pnofk foreign key(Essn) references PROJECT(Pnumber);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> alter table WORKS_ON add constraint pnofk foreign key(Pno) references PROJECT(Pnumber);
+Query OK, 5 rows affected (1.32 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> create table DEPENDENT(Essn char(9) not null,Dependent_name varchar(50) not null,Sex char, Bdate date,Relationship varchar(20));
+Query OK, 0 rows affected (0.32 sec)
+
+mysql> alter table DEPENDENT add constraint essndepnamepk primary key(Essn,Dependent_name);
+Query OK, 0 rows affected (0.81 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from EMPLOYEE
+    -> ;
++---------+------------+--------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname        | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+--------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantriprada  | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Sudheer | babu       | manukonda    | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla  | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy  | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun          | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh  | Dinesh     | Hiregange    | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai     | Phani      | Vallabhaneni | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | 7        |   1 |
++---------+------------+--------------+-----+------------+--------------+--------+------------+----------+-----+
+7 rows in set (0.00 sec)
+
+mysql> insert into DEPENDENT values('1','')
+    -> s
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 's' at line 2
+mysql> exit
+mysql> select * from EMPLOYEE
+    -> ;
++---------+------------+--------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname        | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+--------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantriprada  | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Sudheer | babu       | manukonda    | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla  | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy  | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun          | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh  | Dinesh     | Hiregange    | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai     | Phani      | Vallabhaneni | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | 7        |   1 |
++---------+------------+--------------+-----+------------+--------------+--------+------------+----------+-----+
+7 rows in set (0.00 sec)
+
+mysql> desc DEPENDENT;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| Essn           | char(9)     | NO   | PRI | NULL    |       |
+| Dependent_name | varchar(50) | NO   | PRI | NULL    |       |
+| Sex            | char(1)     | YES  |     | NULL    |       |
+| Bdate          | date        | YES  |     | NULL    |       |
+| Relationship   | varchar(20) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into DEPENDENT values('1','Alan Walker','M','2000-11-11','Brother') ;
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into DEPENDENT values('2','Ranveer singh','M','2000-11-11','Son') ;
+Query OK, 1 row affected (0.11 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> mysql> insert into DEPENDENT values('3','PM','Jaswanth','1960-11-11','Brother') ;
+ERROR 1406 (22001): Data too long for column 'Sex' at row 1
+mysql> insert into DEPENDENT values('3','PM','Jaswanth','M','1960-11-11','Brother') ;
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into DEPENDENT values('3','PM','M','1960-11-11','Brother') ;
+Query OK, 1 row affected (0.10 sec)
+
+mysql> QUERIES START NOW
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'QUERIES START NOW' at line 1
+mysql> select Bdate,Address from EMPLOYEE where Fname='Anjani' AND Mname='Sankar' AND Lname='Mantripragada';
+Empty set (0.00 sec)
+
+mysql> select Bdate,Address from EMPLOYEE where Fname='Anjani';
++------------+-----------+
+| Bdate      | Address   |
++------------+-----------+
+| 1998-11-24 | Hyderabad |
++------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> update EMPLOYEE set Lname='Mantripragada' where Lname='Mantriprada';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select Bdate,Address from EMPLOYEE where Fname='Anjani' AND Mname='Sankar' AND Lname='Mantripragada';
++------------+-----------+
+| Bdate      | Address   |
++------------+-----------+
+| 1998-11-24 | Hyderabad |
++------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> select Fname,Lname,Address from EMPLOYEE,DEPARTMENT WHERE Dname='Computer Engineering' and Dnumber=1;
+ERROR 1146 (42S02): Table 'COMPANY.DEPARTMENT' doesn't exist
+mysql> select Fname,Lname,Address from EMPLOYEE,DEPT WHERE Dname='Computer Engineering' and Dnumber=1;
++---------+---------------+--------------+
+| Fname   | Lname         | Address      |
++---------+---------------+--------------+
+| Anjani  | Mantripragada | Hyderabad    |
+| Sudheer | manukonda     | Tanuku       |
+| Kaushik | Betanabotla   | Hyderabad    |
+| Pavan   | Thatavarthy   | Kavali       |
+| Uzumaki | kun           | Konohagakure |
+| Aneesh  | Hiregange     | Kaiga        |
+| Sai     | Vallabhaneni  | Warangal     |
++---------+---------------+--------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from DEPT;
++----------------------+---------+--------+--------------+
+| Dname                | Dnumber | Mgrssn | mgrstartdate |
++----------------------+---------+--------+--------------+
+| Computer Engineering |       1 | 6      | 2016-01-01   |
+| Electronics DM       |       2 | 3      | 2003-02-03   |
+| Mechanical DM        |       3 | 5      | 2017-10-10   |
++----------------------+---------+--------+--------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from EMPLOYEE;
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Sudheer | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh  | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai     | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | 7        |   1 |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+7 rows in set (0.00 sec)
+
+mysql> select Fname,Lname,Address from EMPLOYEE,DEPT WHERE Dname='Computer Engineering' and Dnumber=Dno;
++---------+---------------+-----------+
+| Fname   | Lname         | Address   |
++---------+---------------+-----------+
+| Anjani  | Mantripragada | Hyderabad |
+| Sudheer | manukonda     | Tanuku    |
+| Pavan   | Thatavarthy   | Kavali    |
+| Aneesh  | Hiregange     | Kaiga     |
+| Sai     | Vallabhaneni  | Warangal  |
++---------+---------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT
+    -> Pnumber
+    -> ,
+    -> Dnum
+    -> ,
+    -> Lname
+    -> ,
+    -> Address
+    -> ,
+    -> Bdate
+    -> FROM
+    -> PROJECT
+    -> ,
+    -> DEPARTMENT
+    -> ,
+    -> EMPLOYEE
+    -> WHERE
+    -> Dnum
+    -> =
+    -> Dnumber
+    -> AND
+    -> Mgr_ssn
+    -> =
+    -> Ssn
+    -> AND
+    -> Plocation
+    -> =
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 27
+mysql> SELECT Pnumber , Dnum , Lname , Address , Bdate FROM PROJECT , DEPT , EMPLOYEE WHERE Dnum = Dnumber AND Mgr_ssn = Ssn AND Plocation ='Chennai';
+ERROR 1054 (42S22): Unknown column 'Mgr_ssn' in 'where clause'
+mysql> SELECT Pnumber , Dnum , Lname , Address , Bdate FROM PROJECT , DEPT , EMPLOYEE WHERE Dnum = Dnumber AND Mgrssn = Ssn AND Plocation ='Chennai';
++---------+------+-----------+---------+------------+
+| Pnumber | Dnum | Lname     | Address | Bdate      |
++---------+------+-----------+---------+------------+
+|       1 |    1 | Hiregange | Kaiga   | 1998-12-15 |
++---------+------+-----------+---------+------------+
+1 row in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| DEPENDENT         |
+| DEPT              |
+| DEPT_LOCATIONS    |
+| EMPLOYEE          |
+| PROJECT           |
+| WORKS_ON          |
++-------------------+
+6 rows in set (0.01 sec)
+
+mysql> select * from EMPLOYEE;
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Sudheer | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh  | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai     | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | 7        |   1 |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+7 rows in set (0.00 sec)
+
+mysql> insert into EMPLOYEE values('Minato',NULL,'Namikaze','8','1991-01-25','Nagasaki','M',5000000,NULL,4);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into EMPLOYEE values('Edward',NULL,'Elrich','9','1991-05-25','Vizag','M',500000,7,4);
+Query OK, 1 row affected (0.11 sec)
+
+mysql> update EMPLOYEE set Superssn=NULL where Ssn=7;
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> insert into EMPLOYEE values('Itachi',NULL,'Uchiha','10','1998-05-25','Eluru','M',900000,11,5);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`COMPANY`.`EMPLOYEE`, CONSTRAINT `superssnfk` FOREIGN KEY (`Superssn`) REFERENCES `EMPLOYEE` (`Ssn`))
+mysql> insert into EMPLOYEE values('Itachi',NULL,'Uchiha','10','1998-05-25','Eluru','M',900000,5,5);
+Query OK, 1 row affected (0.11 sec)
+
+mysql> select * from EMPLOYEE;
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Itachi  | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 |
+| Sudheer | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh  | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai     | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 |
+| Minato  | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 |
+| Edward  | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+10 rows in set (0.00 sec)
+
+mysql> select Mname from EMPLOYEE;
++------------+
+| Mname      |
++------------+
+| Sankar     |
+| NULL       |
+| babu       |
+| mithai     |
+| Chaithanya |
+| Naruto     |
+| Dinesh     |
+| Phani      |
+| NULL       |
+| NULL       |
++------------+
+10 rows in set (0.00 sec)
+
+mysql> update EMPLOYEE set Superssn=NULL where Ssn=5;
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> show tables;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| DEPENDENT         |
+| DEPT              |
+| DEPT_LOCATIONS    |
+| EMPLOYEE          |
+| PROJECT           |
+| WORKS_ON          |
++-------------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from DEPT;
++----------------------+---------+--------+--------------+
+| Dname                | Dnumber | Mgrssn | mgrstartdate |
++----------------------+---------+--------+--------------+
+| Computer Engineering |       1 | 6      | 2016-01-01   |
+| Electronics DM       |       2 | 3      | 2003-02-03   |
+| Mechanical DM        |       3 | 5      | 2017-10-10   |
++----------------------+---------+--------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into DEPT values('Civil Engineering',4,'8','2017-12-31'),('Electrical Engg',5,'10','2018-01-01');
+Query OK, 2 rows affected (0.10 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from DEPT;
++----------------------+---------+--------+--------------+
+| Dname                | Dnumber | Mgrssn | mgrstartdate |
++----------------------+---------+--------+--------------+
+| Computer Engineering |       1 | 6      | 2016-01-01   |
+| Electronics DM       |       2 | 3      | 2003-02-03   |
+| Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Electrical Engg      |       5 | 10     | 2018-01-01   |
++----------------------+---------+--------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| DEPENDENT         |
+| DEPT              |
+| DEPT_LOCATIONS    |
+| EMPLOYEE          |
+| PROJECT           |
+| WORKS_ON          |
++-------------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from DEPT_LOCATIONS;
++---------+-----------+
+| Dnumber | Dlocation |
++---------+-----------+
+|       1 | Chennai   |
+|       1 | Hyderabad |
+|       2 | Bangalore |
+|       2 | Chennai   |
+|       3 | Bangalore |
++---------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> insert into DEPT_LOCATIONS(3,'New Delhi'),(4,'Hyderabad'),(5,'Mumbai');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '3,'New Delhi'),(4,'Hyderabad'),(5,'Mumbai')' at line 1
+mysql> tee abc.txt;
+mysql> insert into DEPT_LOCATIONS values (3,'New Delhi'),(4,'Hyderabad'),(5,'Mumbai');
+Query OK, 3 rows affected (0.10 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from EMPLOYEE;
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Itachi  | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 |
+| Sudheer | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | NULL     |   3 |
+| Aneesh  | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai     | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 |
+| Minato  | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 |
+| Edward  | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+10 rows in set (0.00 sec)
+
+mysql> select * from DEPT;
++----------------------+---------+--------+--------------+
+| Dname                | Dnumber | Mgrssn | mgrstartdate |
++----------------------+---------+--------+--------------+
+| Computer Engineering |       1 | 6      | 2016-01-01   |
+| Electronics DM       |       2 | 3      | 2003-02-03   |
+| Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Electrical Engg      |       5 | 10     | 2018-01-01   |
++----------------------+---------+--------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from DEPT_LOCATIONS;
++---------+-----------+
+| Dnumber | Dlocation |
++---------+-----------+
+|       1 | Chennai   |
+|       1 | Hyderabad |
+|       2 | Bangalore |
+|       2 | Chennai   |
+|       3 | Bangalore |
+|       3 | New Delhi |
+|       4 | Hyderabad |
+|       5 | Mumbai    |
++---------+-----------+
+8 rows in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| DEPENDENT         |
+| DEPT              |
+| DEPT_LOCATIONS    |
+| EMPLOYEE          |
+| PROJECT           |
+| WORKS_ON          |
++-------------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from Projects;
+ERROR 1146 (42S02): Table 'COMPANY.Projects' doesn't exist
+mysql> select * from PROJECT;
++---------------------------------+---------+-----------+------+
+| Pname                           | Pnumber | Plocation | Dnum |
++---------------------------------+---------+-----------+------+
+| Samgatha Webops                 |       1 | Chennai   |    1 |
+| Processor logic making          |       2 | Beijing   |    2 |
+| Optimization of iv-tech engines |       3 | Hyderabad |    3 |
++---------------------------------+---------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into PROJECT values('Smart architectures',4,'Kolkata',4);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into PROJECT values('Lossless electricity transfer',5,'Singareni',5);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select * from Projects;
+ERROR 1146 (42S02): Table 'COMPANY.Projects' doesn't exist
+mysql> select * from PROJECT;
++---------------------------------+---------+-----------+------+
+| Pname                           | Pnumber | Plocation | Dnum |
++---------------------------------+---------+-----------+------+
+| Samgatha Webops                 |       1 | Chennai   |    1 |
+| Processor logic making          |       2 | Beijing   |    2 |
+| Optimization of iv-tech engines |       3 | Hyderabad |    3 |
+| Smart architectures             |       4 | Kolkata   |    4 |
+| Lossless electricity transfer   |       5 | Singareni |    5 |
++---------------------------------+---------+-----------+------+
+5 rows in set (0.01 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| DEPENDENT         |
+| DEPT              |
+| DEPT_LOCATIONS    |
+| EMPLOYEE          |
+| PROJECT           |
+| WORKS_ON          |
++-------------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from WORKS_ON;
++------+-----+-------+
+| Essn | Pno | Hours |
++------+-----+-------+
+| 1    |   1 |   8.2 |
+| 2    |   1 |   8.0 |
+| 3    |   2 |   5.0 |
+| 4    |   1 |   2.5 |
+| 5    |   3 |   9.0 |
++------+-----+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into WORKS_ON values('6',1,10);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into WORKS_ON values('7',1,20);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into WORKS_ON values('7',4,10);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into WORKS_ON values('8',4,6);
+Query OK, 1 row affected (0.11 sec)
+
+mysql> desc WORKS_ON
+    -> ;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| Essn  | char(9)      | NO   | PRI | NULL    |       |
+| Pno   | int(11)      | NO   | PRI | NULL    |       |
+| Hours | decimal(3,1) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> insert into WORKS_ON values('8',4,7);
+ERROR 1062 (23000): Duplicate entry '8-4' for key 'PRIMARY'
+mysql> insert into WORKS_ON values('9',4,7);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into WORKS_ON values('9',5,8);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into WORKS_ON values('9',3,8);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select * from WORKS_ON;
++------+-----+-------+
+| Essn | Pno | Hours |
++------+-----+-------+
+| 1    |   1 |   8.2 |
+| 2    |   1 |   8.0 |
+| 3    |   2 |   5.0 |
+| 4    |   1 |   2.5 |
+| 5    |   3 |   9.0 |
+| 6    |   1 |  10.0 |
+| 7    |   1 |  20.0 |
+| 7    |   4 |  10.0 |
+| 8    |   4 |   6.0 |
+| 9    |   3 |   8.0 |
+| 9    |   4 |   7.0 |
+| 9    |   5 |   8.0 |
++------+-----+-------+
+12 rows in set (0.00 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| DEPENDENT         |
+| DEPT              |
+| DEPT_LOCATIONS    |
+| EMPLOYEE          |
+| PROJECT           |
+| WORKS_ON          |
++-------------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from DEPENDENT;
++------+----------------+------+------------+--------------+
+| Essn | Dependent_name | Sex  | Bdate      | Relationship |
++------+----------------+------+------------+--------------+
+| 1    | Alan Walker    | M    | 2000-11-11 | Brother      |
+| 2    | Ranveer singh  | M    | 2000-11-11 | Son          |
+| 3    | PM             | M    | 1960-11-11 | Brother      |
++------+----------------+------+------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> desc DEPENDENT;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| Essn           | char(9)     | NO   | PRI | NULL    |       |
+| Dependent_name | varchar(50) | NO   | PRI | NULL    |       |
+| Sex            | char(1)     | YES  |     | NULL    |       |
+| Bdate          | date        | YES  |     | NULL    |       |
+| Relationship   | varchar(20) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> select * from EMPLOYEE;
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname   | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani  | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Itachi  | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 |
+| Sudheer | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan   | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | NULL     |   3 |
+| Aneesh  | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai     | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 |
+| Minato  | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 |
+| Edward  | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 |
++---------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+10 rows in set (0.00 sec)
+
+mysql> update DEPENDENT set Dependent_name='Alphonse' where Essn='1';
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update DEPENDENT set Relationship='Son' where Essn='1';
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update DEPENDENT set Dependent_name='Konohamru' where Essn='1';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update DEPENDENT set Dependent_name='Konohamaru' where Essn='1';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update DEPENDENT set Dependent_name='Suhas',Relationship='Son' where Essn='2';
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update DEPENDENT set Dependent_name='Pushwanth',Relationship='Son' where Essn='3';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> insert into DEPENDENT values('3','Elephant','F','1997-04-24','Wife');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into DEPENDENT values('4','Power','F','2000-01-24','Wife');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into DEPENDENT values('5','Hinata hyuuga','F','1998-04-04','Wife'),('5','Uzumaki Boruto','M','2004-02-14','Son'),('5','Uzumaki Himawari','F','2010-12-02','Daughter');
+Query OK, 3 rows affected (0.20 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from DEPENDENT;
++------+------------------+------+------------+--------------+
+| Essn | Dependent_name   | Sex  | Bdate      | Relationship |
++------+------------------+------+------------+--------------+
+| 1    | Konohamaru       | M    | 2000-11-11 | Son          |
+| 2    | Suhas            | M    | 2000-11-11 | Son          |
+| 3    | Elephant         | F    | 1997-04-24 | Wife         |
+| 3    | Pushwanth        | M    | 1960-11-11 | Son          |
+| 4    | Power            | F    | 2000-01-24 | Wife         |
+| 5    | Hinata hyuuga    | F    | 1998-04-04 | Wife         |
+| 5    | Uzumaki Boruto   | M    | 2004-02-14 | Son          |
+| 5    | Uzumaki Himawari | F    | 2010-12-02 | Daughter     |
++------+------------------+------+------------+--------------+
+8 rows in set (0.00 sec)
+
+mysql> update DEPENDENT set Dependent_name='Sakura' where Essn='3';
+ERROR 1062 (23000): Duplicate entry '3-Sakura' for key 'PRIMARY'
+mysql> update DEPENDENT set Dependent_name='Sakura' where Essn='3' and Sex='M';
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update DEPENDENT set Sex='F',Relationship='Daughter' where Essn='3' and Dependent_name='sakura';
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> insert into DEPENDENT values('6','Littlegirl','F','2001-02-04','Wife');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into DEPENDENT values('7','2Js','F','1999-05-10','Wife');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into DEPENDENT values('7','Kushina Uzumaki','F','1995-20-10','Wife'),('7','Kurama','M','2001-09-15','Son');
+ERROR 1292 (22007): Incorrect date value: '1995-20-10' for column 'Bdate' at row 1
+mysql> insert into DEPENDENT values('7','Kushina Uzumaki','F','1995-06-10','Wife'),('7','Kurama','M','2001-09-15','Son');
+Query OK, 2 rows affected (0.11 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from DEPENDENT;
++------+------------------+------+------------+--------------+
+| Essn | Dependent_name   | Sex  | Bdate      | Relationship |
++------+------------------+------+------------+--------------+
+| 1    | Konohamaru       | M    | 2000-11-11 | Son          |
+| 2    | Suhas            | M    | 2000-11-11 | Son          |
+| 3    | Elephant         | F    | 1997-04-24 | Wife         |
+| 3    | Sakura           | F    | 1960-11-11 | Daughter     |
+| 4    | Power            | F    | 2000-01-24 | Wife         |
+| 5    | Hinata hyuuga    | F    | 1998-04-04 | Wife         |
+| 5    | Uzumaki Boruto   | M    | 2004-02-14 | Son          |
+| 5    | Uzumaki Himawari | F    | 2010-12-02 | Daughter     |
+| 6    | Littlegirl       | F    | 2001-02-04 | Wife         |
+| 7    | 2Js              | F    | 1999-05-10 | Wife         |
+| 7    | Kurama           | M    | 2001-09-15 | Son          |
+| 7    | Kushina Uzumaki  | F    | 1995-06-10 | Wife         |
++------+------------------+------+------------+--------------+
+12 rows in set (0.00 sec)
+
+mysql> update DEPENDENT set Essn='8' where Essn='7' and Sex='M';
+Query OK, 1 row affected (0.09 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from DEPENDENT;
++------+------------------+------+------------+--------------+
+| Essn | Dependent_name   | Sex  | Bdate      | Relationship |
++------+------------------+------+------------+--------------+
+| 1    | Konohamaru       | M    | 2000-11-11 | Son          |
+| 2    | Suhas            | M    | 2000-11-11 | Son          |
+| 3    | Elephant         | F    | 1997-04-24 | Wife         |
+| 3    | Sakura           | F    | 1960-11-11 | Daughter     |
+| 4    | Power            | F    | 2000-01-24 | Wife         |
+| 5    | Hinata hyuuga    | F    | 1998-04-04 | Wife         |
+| 5    | Uzumaki Boruto   | M    | 2004-02-14 | Son          |
+| 5    | Uzumaki Himawari | F    | 2010-12-02 | Daughter     |
+| 6    | Littlegirl       | F    | 2001-02-04 | Wife         |
+| 7    | 2Js              | F    | 1999-05-10 | Wife         |
+| 7    | Kushina Uzumaki  | F    | 1995-06-10 | Wife         |
+| 8    | Kurama           | M    | 2001-09-15 | Son          |
++------+------------------+------+------------+--------------+
+12 rows in set (0.00 sec)
+
+mysql> update DEPENDENT set Essn='8' where Essn='7' and Dependent_name='Kushina';
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> select * from DEPENDENT;
++------+------------------+------+------------+--------------+
+| Essn | Dependent_name   | Sex  | Bdate      | Relationship |
++------+------------------+------+------------+--------------+
+| 1    | Konohamaru       | M    | 2000-11-11 | Son          |
+| 2    | Suhas            | M    | 2000-11-11 | Son          |
+| 3    | Elephant         | F    | 1997-04-24 | Wife         |
+| 3    | Sakura           | F    | 1960-11-11 | Daughter     |
+| 4    | Power            | F    | 2000-01-24 | Wife         |
+| 5    | Hinata hyuuga    | F    | 1998-04-04 | Wife         |
+| 5    | Uzumaki Boruto   | M    | 2004-02-14 | Son          |
+| 5    | Uzumaki Himawari | F    | 2010-12-02 | Daughter     |
+| 6    | Littlegirl       | F    | 2001-02-04 | Wife         |
+| 7    | 2Js              | F    | 1999-05-10 | Wife         |
+| 7    | Kushina Uzumaki  | F    | 1995-06-10 | Wife         |
+| 8    | Kurama           | M    | 2001-09-15 | Son          |
++------+------------------+------+------------+--------------+
+12 rows in set (0.00 sec)
+
+mysql> insert into DEPENDENT values('9','Edward Alphonse','M','2010-05-10','Brother');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> insert into DEPENDENT values('10','Sasuke Uchiha','M','2007-08-01','Brother');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> show tables;
++-------------------+
+| Tables_in_COMPANY |
++-------------------+
+| DEPENDENT         |
+| DEPT              |
+| DEPT_LOCATIONS    |
+| EMPLOYEE          |
+| PROJECT           |
+| WORKS_ON          |
++-------------------+
+6 rows in set (0.00 sec)
+
+mysql> desc DEPENDENT;
++----------------+-------------+------+-----+---------+-------+
+| Field          | Type        | Null | Key | Default | Extra |
++----------------+-------------+------+-----+---------+-------+
+| Essn           | char(9)     | NO   | PRI | NULL    |       |
+| Dependent_name | varchar(50) | NO   | PRI | NULL    |       |
+| Sex            | char(1)     | YES  |     | NULL    |       |
+| Bdate          | date        | YES  |     | NULL    |       |
+| Relationship   | varchar(20) | YES  |     | NULL    |       |
++----------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc DEPT;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| Dname        | varchar(20) | NO   |     | NULL    |       |
+| Dnumber      | int(11)     | NO   | PRI | NULL    |       |
+| Mgrssn       | char(9)     | NO   | MUL | NULL    |       |
+| mgrstartdate | date        | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc DEPT_LOCATIONS;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Dnumber   | int(11)     | NO   | PRI | NULL    |       |
+| Dlocation | varchar(15) | NO   | PRI | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc EMPLOYEE;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| Fname    | varchar(15)   | NO   |     | NULL    |       |
+| Mname    | varchar(15)   | YES  |     | NULL    |       |
+| Lname    | varchar(15)   | NO   |     | NULL    |       |
+| Ssn      | char(9)       | NO   | PRI | NULL    |       |
+| Bdate    | date          | YES  |     | NULL    |       |
+| Address  | varchar(50)   | YES  |     | NULL    |       |
+| Gender   | char(1)       | YES  |     | NULL    |       |
+| Salary   | decimal(10,2) | YES  |     | NULL    |       |
+| Superssn | char(9)       | YES  | MUL | NULL    |       |
+| Dno      | int(11)       | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> desc PROJECT;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| Pname     | varchar(50) | NO   |     | NULL    |       |
+| Pnumber   | int(11)     | NO   | PRI | NULL    |       |
+| Plocation | varchar(20) | YES  |     | NULL    |       |
+| Dnum      | int(11)     | NO   | MUL | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc WORKS_ON;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| Essn  | char(9)      | NO   | PRI | NULL    |       |
+| Pno   | int(11)      | NO   | PRI | NULL    |       |
+| Hours | decimal(3,1) | NO   |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select Bdate,Address from EMPLOYEE where Fname='Uzumaki' and Mname='Naruto' and Lname='kun' 
+    -> ;
++------------+--------------+
+| Bdate      | Address      |
++------------+--------------+
+| 1997-10-10 | Konohagakure |
++------------+--------------+
+1 row in set (0.00 sec)
+
+mysql> select Fname,Lname,Address from EMPLOYEE,DEPARTMENT where Dname='Electronics DM' and Dnumber=Dno;
+ERROR 1146 (42S02): Table 'COMPANY.DEPARTMENT' doesn't exist
+mysql> select Fname,Lname,Address from EMPLOYEE,DEPT where Dname='Electronics DM' and Dnumber=Dno;
++---------+-------------+-----------+
+| Fname   | Lname       | Address   |
++---------+-------------+-----------+
+| Kaushik | Betanabotla | Hyderabad |
++---------+-------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> select Pnumber,Dnum,Lname,Address,Bdate from PROJECT,DEPT,EMPLOYEE where Dnum=Dnumber and Mgrssn=Ssn andPlocation='Chennai';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'andPlocation='Chennai'' at line 1
+mysql> select Pnumber,Dnum,Lname,Address,Bdate from PROJECT,DEPT,EMPLOYEE where Dnum=Dnumber and Mgrssn=Ssn and Plocation='Chennai';
++---------+------+-----------+---------+------------+
+| Pnumber | Dnum | Lname     | Address | Bdate      |
++---------+------+-----------+---------+------------+
+|       1 |    1 | Hiregange | Kaiga   | 1998-12-15 |
++---------+------+-----------+---------+------------+
+1 row in set (0.00 sec)
+
+mysql> insert into EMPLOYEE values('Shikamaru','NULL','Nara','11','1997-12-12','Hiroshima','M',100000,NULL,NULL);
+ERROR 1048 (23000): Column 'Dno' cannot be null
+mysql> insert into EMPLOYEE values('Shikamaru','NULL','Nara','11','1997-12-12','Hiroshima','M',100000,NULL,3);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> desc EMPLOYEE
+    -> ;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| Fname    | varchar(15)   | NO   |     | NULL    |       |
+| Mname    | varchar(15)   | YES  |     | NULL    |       |
+| Lname    | varchar(15)   | NO   |     | NULL    |       |
+| Ssn      | char(9)       | NO   | PRI | NULL    |       |
+| Bdate    | date          | YES  |     | NULL    |       |
+| Address  | varchar(50)   | YES  |     | NULL    |       |
+| Gender   | char(1)       | YES  |     | NULL    |       |
+| Salary   | decimal(10,2) | YES  |     | NULL    |       |
+| Superssn | char(9)       | YES  | MUL | NULL    |       |
+| Dno      | int(11)       | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> select Fname,EMPLOYEE.Name,Address from EMPlOYEE,DEPT where DEPT.Dname='mechanical DM' and DEPT.Dnumber=EMPLOYEE.Dno;
+ERROR 1146 (42S02): Table 'COMPANY.EMPlOYEE' doesn't exist
+mysql> select Fname,EMPLOYEE.Name,Address from EMPLOYEE,DEPT where DEPT.Dname='mechanical DM' and DEPT.Dnumber=EMPLOYEE.Dno;
+ERROR 1054 (42S22): Unknown column 'EMPLOYEE.Name' in 'field list'
+mysql> select Fname,EMPLOYEE.Lname,Address from EMPLOYEE,DEPT where DEPT.Dname='mechanical DM' and DEPT.Dnumber=EMPLOYEE.Dno;
++-----------+-------+--------------+
+| Fname     | Lname | Address      |
++-----------+-------+--------------+
+| Shikamaru | Nara  | Hiroshima    |
+| Uzumaki   | kun   | Konohagakure |
++-----------+-------+--------------+
+2 rows in set (0.00 sec)
+
+mysql> select E.Fname,E.Lname,S.Fname,S.Lname from EMPLOYEE as E,EMPLOYEE as S where E.Superssn=S.Ssn;
++---------+---------------+---------+--------------+
+| Fname   | Lname         | Fname   | Lname        |
++---------+---------------+---------+--------------+
+| Anjani  | Mantripragada | Uzumaki | kun          |
+| Itachi  | Uchiha        | Uzumaki | kun          |
+| Sudheer | manukonda     | Uzumaki | kun          |
+| Kaushik | Betanabotla   | Sai     | Vallabhaneni |
+| Pavan   | Thatavarthy   | Uzumaki | kun          |
+| Aneesh  | Hiregange     | Uzumaki | kun          |
+| Edward  | Elrich        | Sai     | Vallabhaneni |
++---------+---------------+---------+--------------+
+7 rows in set (0.00 sec)
+
+mysql> select Ssn from EMPLOYEE;
++-----+
+| Ssn |
++-----+
+| 11  |
+| 5   |
+| 7   |
+| 8   |
+| 1   |
+| 10  |
+| 2   |
+| 4   |
+| 6   |
+| 3   |
+| 9   |
++-----+
+11 rows in set (0.00 sec)
+
+mysql> select Ssn,Dname from EMPLOYEE,DEPT;
++-----+----------------------+
+| Ssn | Dname                |
++-----+----------------------+
+| 11  | Computer Engineering |
+| 11  | Electronics DM       |
+| 11  | Mechanical DM        |
+| 11  | Civil Engineering    |
+| 11  | Electrical Engg      |
+| 5   | Computer Engineering |
+| 5   | Electronics DM       |
+| 5   | Mechanical DM        |
+| 5   | Civil Engineering    |
+| 5   | Electrical Engg      |
+| 7   | Computer Engineering |
+| 7   | Electronics DM       |
+| 7   | Mechanical DM        |
+| 7   | Civil Engineering    |
+| 7   | Electrical Engg      |
+| 8   | Computer Engineering |
+| 8   | Electronics DM       |
+| 8   | Mechanical DM        |
+| 8   | Civil Engineering    |
+| 8   | Electrical Engg      |
+| 1   | Computer Engineering |
+| 1   | Electronics DM       |
+| 1   | Mechanical DM        |
+| 1   | Civil Engineering    |
+| 1   | Electrical Engg      |
+| 10  | Computer Engineering |
+| 10  | Electronics DM       |
+| 10  | Mechanical DM        |
+| 10  | Civil Engineering    |
+| 10  | Electrical Engg      |
+| 2   | Computer Engineering |
+| 2   | Electronics DM       |
+| 2   | Mechanical DM        |
+| 2   | Civil Engineering    |
+| 2   | Electrical Engg      |
+| 4   | Computer Engineering |
+| 4   | Electronics DM       |
+| 4   | Mechanical DM        |
+| 4   | Civil Engineering    |
+| 4   | Electrical Engg      |
+| 6   | Computer Engineering |
+| 6   | Electronics DM       |
+| 6   | Mechanical DM        |
+| 6   | Civil Engineering    |
+| 6   | Electrical Engg      |
+| 3   | Computer Engineering |
+| 3   | Electronics DM       |
+| 3   | Mechanical DM        |
+| 3   | Civil Engineering    |
+| 3   | Electrical Engg      |
+| 9   | Computer Engineering |
+| 9   | Electronics DM       |
+| 9   | Mechanical DM        |
+| 9   | Civil Engineering    |
+| 9   | Electrical Engg      |
++-----+----------------------+
+55 rows in set (0.00 sec)
+
+mysql> select * from EMPLOYEE where Dno=5;
++--------+-------+--------+-----+------------+---------+--------+-----------+----------+-----+
+| Fname  | Mname | Lname  | Ssn | Bdate      | Address | Gender | Salary    | Superssn | Dno |
++--------+-------+--------+-----+------------+---------+--------+-----------+----------+-----+
+| Itachi | NULL  | Uchiha | 10  | 1998-05-25 | Eluru   | M      | 900000.00 | 5        |   5 |
++--------+-------+--------+-----+------------+---------+--------+-----------+----------+-----+
+1 row in set (0.01 sec)
+
+mysql> select * from EMPLOYEE,DEPT where Dname='civil Engineering' and Dno=Dnumber;
++--------+-------+----------+-----+------------+----------+--------+------------+----------+-----+-------------------+---------+--------+--------------+
+| Fname  | Mname | Lname    | Ssn | Bdate      | Address  | Gender | Salary     | Superssn | Dno | Dname             | Dnumber | Mgrssn | mgrstartdate |
++--------+-------+----------+-----+------------+----------+--------+------------+----------+-----+-------------------+---------+--------+--------------+
+| Minato | NULL  | Namikaze | 8   | 1991-01-25 | Nagasaki | M      | 5000000.00 | NULL     |   4 | Civil Engineering |       4 | 8      | 2017-12-31   |
+| Edward | NULL  | Elrich   | 9   | 1991-05-25 | Vizag    | M      |  500000.00 | 7        |   4 | Civil Engineering |       4 | 8      | 2017-12-31   |
++--------+-------+----------+-----+------------+----------+--------+------------+----------+-----+-------------------+---------+--------+--------------+
+2 rows in set (0.00 sec)
+
+mysql> update EMPLOYEE set Superssnuperssn='7' where Ssn='7';
+ERROR 1054 (42S22): Unknown column 'Superssnuperssn' in 'field list'
+mysql> update EMPLOYEE set Superssnuperssn='7' where Ssn='7';
+ERROR 1054 (42S22): Unknown column 'Superssnuperssn' in 'field list'
+mysql> update EMPLOYEE set Superssn='7' where Ssn='7';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update EMPLOYEE set Superssn=NULL where Ssn='7';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from EMPLOYEE,DEPT;
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+----------------------+---------+--------+--------------+
+| Fname     | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno | Dname                | Dnumber | Mgrssn | mgrstartdate |
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+----------------------+---------+--------+--------------+
+| Anjani    | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Anjani    | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Anjani    | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Anjani    | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Anjani    | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Itachi    | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Itachi    | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Itachi    | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Itachi    | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Itachi    | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Shikamaru | NULL       | Nara          | 11  | 1997-12-12 | Hiroshima    | M      |  100000.00 | NULL     |   3 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Shikamaru | NULL       | Nara          | 11  | 1997-12-12 | Hiroshima    | M      |  100000.00 | NULL     |   3 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Shikamaru | NULL       | Nara          | 11  | 1997-12-12 | Hiroshima    | M      |  100000.00 | NULL     |   3 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Shikamaru | NULL       | Nara          | 11  | 1997-12-12 | Hiroshima    | M      |  100000.00 | NULL     |   3 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Shikamaru | NULL       | Nara          | 11  | 1997-12-12 | Hiroshima    | M      |  100000.00 | NULL     |   3 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Sudheer   | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Sudheer   | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Sudheer   | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Sudheer   | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Sudheer   | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Kaushik   | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Kaushik   | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Kaushik   | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Kaushik   | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Kaushik   | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Pavan     | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Pavan     | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Pavan     | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Pavan     | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Pavan     | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Uzumaki   | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | NULL     |   3 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Uzumaki   | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | NULL     |   3 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Uzumaki   | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | NULL     |   3 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Uzumaki   | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | NULL     |   3 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Uzumaki   | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | NULL     |   3 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Aneesh    | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Aneesh    | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Aneesh    | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Aneesh    | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Aneesh    | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Sai       | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Sai       | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Sai       | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Sai       | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Sai       | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Minato    | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Minato    | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Minato    | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Minato    | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Minato    | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 | Electrical Engg      |       5 | 10     | 2018-01-01   |
+| Edward    | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 | Computer Engineering |       1 | 6      | 2016-01-01   |
+| Edward    | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 | Electronics DM       |       2 | 3      | 2003-02-03   |
+| Edward    | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 | Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Edward    | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 | Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Edward    | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 | Electrical Engg      |       5 | 10     | 2018-01-01   |
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+----------------------+---------+--------+--------------+
+55 rows in set (0.01 sec)
+
+mysql> select all Salary from EMPLOYEE;
++------------+
+| Salary     |
++------------+
+| 2000000.00 |
+|  900000.00 |
+|  100000.00 |
+| 5000000.00 |
+|   10000.00 |
+| 9000000.00 |
+|  100000.00 |
+| 9000000.00 |
+|  900000.00 |
+| 5000000.00 |
+|  500000.00 |
++------------+
+11 rows in set (0.00 sec)
+
+mysql> select distinct Salary from EMPLOYEE;
++------------+
+| Salary     |
++------------+
+| 2000000.00 |
+|  900000.00 |
+|  100000.00 |
+| 5000000.00 |
+|   10000.00 |
+| 9000000.00 |
+|  500000.00 |
++------------+
+7 rows in set (0.00 sec)
+
+mysql> select distinct Pnumber from PROJECT,DEPT,EMPLOYEE where Dnum=Dnumber and Mgrssn=Ssn and Lname='kun';
++---------+
+| Pnumber |
++---------+
+|       3 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> select distinct Pnumber from PROJECT,WORKS_ON,EMPLOYEE where Pnumber=Pno and Essn=Ssn and Lname='kun';
++---------+
+| Pnumber |
++---------+
+|       3 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> (select distinct Pnumber from PROJECT,DEPT,EMPLOYEE where Dnum=Dnumber and Mgrssn=Ssn and Lname='kun') union (select distinct Pnumber from PROJECT,WORKS_ON,EMPLOYEE where Pnumber=Pno and Essn=Ssn and Lname='kun';)
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> (select distinct Pnumber from PROJECT,DEPT,EMPLOYEE where Dnum=Dnumber and Mgrssn=Ssn and Lname='kun') union (select distinct Pnumber from PROJECT,WORKS_ON,EMPLOYEE where Pnumber=Pno and Essn=Ssn and Lname='kun');
++---------+
+| Pnumber |
++---------+
+|       3 |
++---------+
+1 row in set (0.00 sec)
+
+mysql> select Fname,Lname from EMPLOYEE where Bdate LIKE '__5_______';
+Empty set, 1 warning (0.00 sec)
+
+mysql> select Fname,Lname from EMPLOYEE where Bdate LIKE '__9_______';
++-----------+---------------+
+| Fname     | Lname         |
++-----------+---------------+
+| Anjani    | Mantripragada |
+| Itachi    | Uchiha        |
+| Shikamaru | Nara          |
+| Sudheer   | manukonda     |
+| Kaushik   | Betanabotla   |
+| Pavan     | Thatavarthy   |
+| Uzumaki   | kun           |
+| Aneesh    | Hiregange     |
+| Sai       | Vallabhaneni  |
+| Minato    | Namikaze      |
+| Edward    | Elrich        |
++-----------+---------------+
+11 rows in set, 1 warning (0.00 sec)
+
+mysql> update EMPLOYEE set Superssn='7' where Ssn='7';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update EMPLOYEE set Superssn='5' where Ssn='7';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update EMPLOYEE set Superssn=NULL where Ssn='7';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select E.Fname,E.Lname, 1.1*E.Salary as Inc_sal from EMPLOYEE as E,WORKS_ON as W,PROJECT as P where E.Ssn=W.Essn and W.pno=P.Pnumber and P.Pname='samgatha webops';
++---------+---------------+-------------+
+| Fname   | Lname         | Inc_sal     |
++---------+---------------+-------------+
+| Anjani  | Mantripragada | 2200000.000 |
+| Sudheer | manukonda     | 5500000.000 |
+| Pavan   | Thatavarthy   | 9900000.000 |
+| Aneesh  | Hiregange     | 9900000.000 |
+| Sai     | Vallabhaneni  |  990000.000 |
++---------+---------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from EMPLOYEE where (Salary between 100000 and 900000) and Dno=1;
++-------+-------+--------------+-----+------------+----------+--------+-----------+----------+-----+
+| Fname | Mname | Lname        | Ssn | Bdate      | Address  | Gender | Salary    | Superssn | Dno |
++-------+-------+--------------+-----+------------+----------+--------+-----------+----------+-----+
+| Sai   | Phani | Vallabhaneni | 7   | 1998-08-08 | Warangal | M      | 900000.00 | NULL     |   1 |
++-------+-------+--------------+-----+------------+----------+--------+-----------+----------+-----+
+1 row in set (0.00 sec)
+
+mysql> select D.Dname,E.Lname,E.Fname,P.Pname from DEPT D,EMPLOYEE E, WORKS_ON W, PROJECT P where D.Dnumber=E.Dno and E.Ssn=W.Essn and W.Pno=P.Pnumber order by D.Dname,E.Lname,E.Fname;
++----------------------+---------------+---------+---------------------------------+
+| Dname                | Lname         | Fname   | Pname                           |
++----------------------+---------------+---------+---------------------------------+
+| Civil Engineering    | Elrich        | Edward  | Smart architectures             |
+| Civil Engineering    | Elrich        | Edward  | Lossless electricity transfer   |
+| Civil Engineering    | Elrich        | Edward  | Optimization of iv-tech engines |
+| Civil Engineering    | Namikaze      | Minato  | Smart architectures             |
+| Computer Engineering | Hiregange     | Aneesh  | Samgatha Webops                 |
+| Computer Engineering | Mantripragada | Anjani  | Samgatha Webops                 |
+| Computer Engineering | manukonda     | Sudheer | Samgatha Webops                 |
+| Computer Engineering | Thatavarthy   | Pavan   | Samgatha Webops                 |
+| Computer Engineering | Vallabhaneni  | Sai     | Smart architectures             |
+| Computer Engineering | Vallabhaneni  | Sai     | Samgatha Webops                 |
+| Electronics DM       | Betanabotla   | Kaushik | Processor logic making          |
+| Mechanical DM        | kun           | Uzumaki | Optimization of iv-tech engines |
++----------------------+---------------+---------+---------------------------------+
+12 rows in set (0.00 sec)
+
+mysql> delete EMPLOYEE where Lname='Mantripragada';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where Lname='Mantripragada'' at line 1
+mysql> delete EMPLOYEE where Ssn='1';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where Ssn='1'' at line 1
+mysql> delete from EMPLOYEE where Ssn='1';
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`COMPANY`.`WORKS_ON`, CONSTRAINT `essnfk` FOREIGN KEY (`Essn`) REFERENCES `EMPLOYEE` (`Ssn`))
+mysql> describe EMPLOYEE;
++----------+---------------+------+-----+---------+-------+
+| Field    | Type          | Null | Key | Default | Extra |
++----------+---------------+------+-----+---------+-------+
+| Fname    | varchar(15)   | NO   |     | NULL    |       |
+| Mname    | varchar(15)   | YES  |     | NULL    |       |
+| Lname    | varchar(15)   | NO   |     | NULL    |       |
+| Ssn      | char(9)       | NO   | PRI | NULL    |       |
+| Bdate    | date          | YES  |     | NULL    |       |
+| Address  | varchar(50)   | YES  |     | NULL    |       |
+| Gender   | char(1)       | YES  |     | NULL    |       |
+| Salary   | decimal(10,2) | YES  |     | NULL    |       |
+| Superssn | char(9)       | YES  | MUL | NULL    |       |
+| Dno      | int(11)       | NO   |     | NULL    |       |
++----------+---------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> select * from DEPT;
++----------------------+---------+--------+--------------+
+| Dname                | Dnumber | Mgrssn | mgrstartdate |
++----------------------+---------+--------+--------------+
+| Computer Engineering |       1 | 6      | 2016-01-01   |
+| Electronics DM       |       2 | 3      | 2003-02-03   |
+| Mechanical DM        |       3 | 5      | 2017-10-10   |
+| Civil Engineering    |       4 | 8      | 2017-12-31   |
+| Electrical Engg      |       5 | 10     | 2018-01-01   |
++----------------------+---------+--------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from EMPLOYEE;
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname     | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani    | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Itachi    | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 |
+| Shikamaru | NULL       | Nara          | 11  | 1997-12-12 | Hiroshima    | M      |  100000.00 | NULL     |   3 |
+| Sudheer   | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik   | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan     | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki   | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | NULL     |   3 |
+| Aneesh    | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai       | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | NULL     |   1 |
+| Minato    | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 |
+| Edward    | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   4 |
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+11 rows in set (0.00 sec)
+
+mysql> insert into DEPT values('snf',3,'5','1998-08-08');
+ERROR 1062 (23000): Duplicate entry '3' for key 'PRIMARY'
+mysql> insert into DEPT values('snf',NULL,'5','1998-08-08');
+ERROR 1048 (23000): Column 'Dnumber' cannot be null
+mysql> exit
