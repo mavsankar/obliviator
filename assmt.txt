@@ -1,0 +1,304 @@
+mysql> SELECT DNUMBER, DNAME,COUNT(*),AVG(SALARY) FROM DEPT,EMPLOYEE WHERE DNO=DNUMBER GROUP BY DNUMBER HAVING AVG(SALARY)>300000;
++---------+----------------------+----------+----------------+
+| DNUMBER | DNAME                | COUNT(*) | AVG(SALARY)    |
++---------+----------------------+----------+----------------+
+|       1 | Computer Engineering |        5 | 5180000.000000 |
+|       4 | Civil Engineering    |        1 | 5000000.000000 |
+|       5 | Electrical Engg      |        2 |  700000.000000 |
++---------+----------------------+----------+----------------+
+3 rows in set (0.04 sec)
+
+mysql> SELECT DNUMBER, DNAME,COUNT(*),AVG(SALARY) FROM DEPT,EMPLOYEE WHERE DNO=DNUMBER GROUP BY DNUMBER HAVING AVG(SALARY)>3000000;
++---------+----------------------+----------+----------------+
+| DNUMBER | DNAME                | COUNT(*) | AVG(SALARY)    |
++---------+----------------------+----------+----------------+
+|       1 | Computer Engineering |        5 | 5180000.000000 |
+|       4 | Civil Engineering    |        1 | 5000000.000000 |
++---------+----------------------+----------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT DNUMBER, DNAME,COUNT(*),AVG(SALARY) FROM DEPT,EMPLOYEE WHERE DNO=DNUMBER AND GENDER='M' GROUP BY DNUMBER HAVING AVG(SALARY)>300000;
++---------+----------------------+----------+----------------+
+| DNUMBER | DNAME                | COUNT(*) | AVG(SALARY)    |
++---------+----------------------+----------+----------------+
+|       1 | Computer Engineering |        5 | 5180000.000000 |
+|       4 | Civil Engineering    |        1 | 5000000.000000 |
+|       5 | Electrical Engg      |        2 |  700000.000000 |
++---------+----------------------+----------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT DNUMBER, DNAME,COUNT(*),AVG(SALARY) FROM DEPT,EMPLOYEE WHERE DNO=DNUMBER AND GENDER='F' GROUP BY DNUMBER HAVING AVG(SALARY)>300000;
+Empty set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE DNO IN (SELECT DISTINCT DNO FROM EMPLOYEE WHERE SALARY=(SELECT MAX(SALARY) FROM EMPLOYEE));
++---------+---------------+
+| FNAME   | LNAME         |
++---------+---------------+
+| Anjani  | Mantripragada |
+| Sudheer | manukonda     |
+| Pavan   | Thatavarthy   |
+| Aneesh  | Hiregange     |
+| Sai     | Vallabhaneni  |
++---------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE E1 WHERE (SELECT SUPERSSN FROM EMPLOYEE E2 WHERE E2.SSN=E1.SUPERSSN)=7;
++---------+---------------+
+| FNAME   | LNAME         |
++---------+---------------+
+| Anjani  | Mantripragada |
+| Itachi  | Uchiha        |
+| Sudheer | manukonda     |
+| Pavan   | Thatavarthy   |
+| Aneesh  | Hiregange     |
+| Sai     | Vallabhaneni  |
++---------+---------------+
+6 rows in set (0.01 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE SALARY>(SELECT MIN(SALARY) FROM EMPLOYEE)+10000;
++-----------+---------------+
+| FNAME     | LNAME         |
++-----------+---------------+
+| Anjani    | Mantripragada |
+| Itachi    | Uchiha        |
+| Shikamaru | Nara          |
+| Sudheer   | manukonda     |
+| Pavan     | Thatavarthy   |
+| Uzumaki   | kun           |
+| Aneesh    | Hiregange     |
+| Sai       | Vallabhaneni  |
+| Minato    | Namikaze      |
+| Edward    | Elrich        |
++-----------+---------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT MIN(SALARY) FROM EMPLOYEE;
++-------------+
+| MIN(SALARY) |
++-------------+
+|       10.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE DNO=2 AND (SELECT HOURS FROM WORKS_ON WHERE PNO=1 AND ESSN=SSN)>40;
+Empty set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE DNO=2 AND (SELECT HOURS FROM WORKS_ON WHERE PNO=3 AND ESSN=SSN)>40;
+Empty set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE DNO=2 AND (SELECT HOURS FROM WORKS_ON WHERE PNO=2 AND ESSN=SSN)>40;
+Empty set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE DNO=2 AND (SELECT HOURS FROM WORKS_ON WHERE PNO=4 AND ESSN=SSN)>40;
+Empty set (0.01 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE DNO=4 AND (SELECT HOURS FROM WORKS_ON WHERE PNO=4 AND ESSN=SSN)>40;
+Empty set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE DNO=4 AND (SELECT HOURS FROM WORKS_ON WHERE PNO=4 AND ESSN=SSN)>10;
+Empty set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE DNO=4 AND (SELECT HOURS FROM WORKS_ON WHERE PNO=4 AND ESSN=SSN)>1;
++--------+----------+
+| FNAME  | LNAME    |
++--------+----------+
+| Minato | Namikaze |
++--------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE FNAME IN(SELECT DEPENDENT_NAME FROM DEPENDENT WHERE ESSN=SSN);
+Empty set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE SUPERSSN=(SELECT SSN FROM EMPLOYEE WHERE FNAME="Sai" AND LNAME="Phani");
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM EMPLOYEE;
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname     | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani    | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Itachi    | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 |
+| Shikamaru | NULL       | Nara          | 11  | 1997-12-12 | Hiroshima    | M      |  100000.00 | NULL     |   3 |
+| daada     | das        | dad           | 12  | 1998-11-24 | dashba       | F      |      10.00 | 1        |   3 |
+| Sudheer   | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik   | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan     | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki   | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh    | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai       | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | 5        |   1 |
+| Minato    | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 |
+| Edward    | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   5 |
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+12 rows in set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE SUPERSSN=(SELECT SSN FROM EMPLOYEE WHERE FNAME="Sai" AND LNAME="Vallabhaneni");
++---------+-------------+
+| FNAME   | LNAME       |
++---------+-------------+
+| Kaushik | Betanabotla |
+| Uzumaki | kun         |
+| Edward  | Elrich      |
++---------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE,WORKS_ON WHERE ESSN=SSN AND PNO IN (SELECT PNO FROM WORKS_ON,PROJECT WHERE DNUM=2 AND PNO=PNUMBER);
++--------+--------+
+| FNAME  | LNAME  |
++--------+--------+
+| Edward | Elrich |
++--------+--------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE (SELECT COUNT(*) FROM WORKS_ON,PROJECT WHERE DNUM=2 AND PNO=PNUMBER AND ESSN=SSN GROUP BY SSN)= (SELECT COUNT(*) FROM WORKS_ON,PROJECT WHERE DNUM=2 AND PNO=PNUMBER GROUP BY DNUM);
++--------+--------+
+| FNAME  | LNAME  |
++--------+--------+
+| Edward | Elrich |
++--------+--------+
+1 row in set (0.00 sec)
+
+mysql> SELECT AVG(SALARY) FROM EMPLOYEE WHERE GENDER="F";
++-------------+
+| AVG(SALARY) |
++-------------+
+|   10.000000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FNAME,LNAME,ADDRESS FROM EMPLOYEE  WHERE EXISTS(SELECT * FROM PROJECT,WORKS_ON WHERE PLOCATION="Chennai" AND ESSN=SSN AND PNO=PNUMBER) AND NOT EXISTS(SELECT * FROM DEPT_LOCATIONS WHERE DLOCATION="Chennai" AND DNUMBER=DNO);
++--------+--------+---------+
+| FNAME  | LNAME  | ADDRESS |
++--------+--------+---------+
+| Edward | Elrich | Vizag   |
++--------+--------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT LNAME FROM DEPT,EMPLOYEE WHERE MGRSSN=SSN AND NOT EXISTS(SELECT * FROM DEPENDENT WHERE ESSN=SSN);
++-------------+
+| LNAME       |
++-------------+
+| Thatavarthy |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT PNAME,PNUMBER,SUM(HOURS) FROM PROJECT,WORKS_ON WHERE PNO=PNUMBER GROUP BY PNUMBER;
++---------------------------------+---------+------------+
+| PNAME                           | PNUMBER | SUM(HOURS) |
++---------------------------------+---------+------------+
+| Samgatha Webops                 |       1 |       48.7 |
+| Processor logic making          |       2 |        5.0 |
+| Optimization of iv-tech engines |       3 |       17.0 |
+| Smart architectures             |       4 |       23.0 |
+| Lossless electricity transfer   |       5 |        8.0 |
++---------------------------------+---------+------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT E1.FNAME,E1.LNAME FROM EMPLOYEE E1 WHERE (SELECT SSN FROM EMPLOYEE WHERE FNAME="Phani" AND LNAME="SAI")=(SELECT SUPERSSN FROM EMPLOYEE E2 WHERE E2.SSN=E1.SUPERSSN);
+Empty set (0.01 sec)
+
+mysql> SELECT E1.FNAME,E1.LNAME FROM EMPLOYEE E1 WHERE (SELECT SSN FROM EMPLOYEE WHERE FNAME="Sai" AND LNAME="SAI")=(SELECT SUPERSSN FROM EMPLOYEE E2 WHERE E2.SSN=E1.SUPERSSN);
+Empty set (0.00 sec)
+
+mysql> SELECT E1.FNAME,E1.LNAME FROM EMPLOYEE E1 WHERE (SELECT SSN FROM EMPLOYEE WHERE FNAME="Sai" AND LNAME="Vallabhaneni")=(SELECT SUPERSSN FROM EMPLOYEE E2 WHERE E2.SSN=E1.SUPERSSN);
++---------+---------------+
+| FNAME   | LNAME         |
++---------+---------------+
+| Anjani  | Mantripragada |
+| Itachi  | Uchiha        |
+| Sudheer | manukonda     |
+| Pavan   | Thatavarthy   |
+| Aneesh  | Hiregange     |
+| Sai     | Vallabhaneni  |
++---------+---------------+
+6 rows in set (0.01 sec)
+
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE,WORKS_ON WHERE ESSN=SSN AND PNO IN(SELECT PNUMBER FROM PROJECT WHERE DNUM=2); 
++--------+--------+
+| FNAME  | LNAME  |
++--------+--------+
+| Edward | Elrich |
++--------+--------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM DEPENDENT
+    -> ;
++------+------------------+------+------------+--------------+
+| Essn | Dependent_name   | Sex  | Bdate      | Relationship |
++------+------------------+------+------------+--------------+
+| 1    | Konohamaru       | M    | 2000-11-11 | Son          |
+| 10   | Sasuke Uchiha    | M    | 2007-08-01 | Brother      |
+| 2    | Suhas            | M    | 2000-11-11 | Son          |
+| 3    | Elephant         | F    | 1997-04-24 | Wife         |
+| 3    | Sakura           | F    | 1960-11-11 | Daughter     |
+| 5    | Hinata hyuuga    | F    | 1998-04-04 | Wife         |
+| 5    | Uzumaki Boruto   | M    | 2004-02-14 | Son          |
+| 5    | Uzumaki Himawari | F    | 2010-12-02 | Daughter     |
+| 6    | Littlegirl       | F    | 2001-02-04 | Wife         |
+| 8    | Kurama           | M    | 2001-09-15 | Son          |
+| 9    | Edward Alphonse  | M    | 2010-05-10 | Brother      |
++------+------------------+------+------------+--------------+
+11 rows in set (0.00 sec)
+mysql> SELECT FNAME,LNAME FROM EMPLOYEE WHERE GENDER="M" AND EXISTS(SELECT *  FROM DEPENDENT WHERE DEPENDENT_NAME=FNAME);
+Empty set (0.00 sec)
+
+mysql> CREATE TABLE EMPLOYEE_BACKUP(SELECT * FROM EMPLOYEE);
+Query OK, 12 rows affected (0.46 sec)
+Records: 12  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM EMPLOYEE_BACKUP;
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Fname     | Mname      | Lname         | Ssn | Bdate      | Address      | Gender | Salary     | Superssn | Dno |
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+| Anjani    | Sankar     | Mantripragada | 1   | 1998-11-24 | Hyderabad    | M      | 2000000.00 | 5        |   1 |
+| Itachi    | NULL       | Uchiha        | 10  | 1998-05-25 | Eluru        | M      |  900000.00 | 5        |   5 |
+| Shikamaru | NULL       | Nara          | 11  | 1997-12-12 | Hiroshima    | M      |  100000.00 | NULL     |   3 |
+| daada     | das        | dad           | 12  | 1998-11-24 | dashba       | F      |      10.00 | 1        |   3 |
+| Sudheer   | babu       | manukonda     | 2   | 1998-03-12 | Tanuku       | M      | 5000000.00 | 5        |   1 |
+| Kaushik   | mithai     | Betanabotla   | 3   | 1997-04-24 | Hyderabad    | M      |   10000.00 | 7        |   2 |
+| Pavan     | Chaithanya | Thatavarthy   | 4   | 1999-05-28 | Kavali       | M      | 9000000.00 | 5        |   1 |
+| Uzumaki   | Naruto     | kun           | 5   | 1997-10-10 | Konohagakure | M      |  100000.00 | 7        |   3 |
+| Aneesh    | Dinesh     | Hiregange     | 6   | 1998-12-15 | Kaiga        | M      | 9000000.00 | 5        |   1 |
+| Sai       | Phani      | Vallabhaneni  | 7   | 1998-08-08 | Warangal     | M      |  900000.00 | 5        |   1 |
+| Minato    | NULL       | Namikaze      | 8   | 1991-01-25 | Nagasaki     | M      | 5000000.00 | NULL     |   4 |
+| Edward    | NULL       | Elrich        | 9   | 1991-05-25 | Vizag        | M      |  500000.00 | 7        |   5 |
++-----------+------------+---------------+-----+------------+--------------+--------+------------+----------+-----+
+12 rows in set (0.00 sec)
+
+mysql> SELECT FNAME FROM EMPLOYEE,WORKS_ON WHERE ESSN=SSN AND PNO IN (SELECT PNO FROM WORKS_ON,EMPLOYEE WHERE ESSN=SSN AND SSN IN(SELECT E.SSN FROM EMPLOYEE E,WORKS_ON,PROJECT P WHERE PNO=P.PNUMBER AND E.SSN=ESSN AND (SELECT COUNT(*) FROM WORKS_ON WHERE ESSN=E.SSN)<=ALL(SELECT COUNT(*) FROM WORKS_ON,PROJECT WHERE PNO=PNUMBER AND P.DNUM=DNUM GROUP BY ESSN)));
++---------+
+| FNAME   |
++---------+
+| Anjani  |
+| Sudheer |
+| Uzumaki |
+| Aneesh  |
+| Sai     |
+| Sai     |
+| Minato  |
+| Edward  |
+| Edward  |
+| Edward  |
++---------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT FNAME,DNUM FROM EMPLOYEE,WORKS_ON WHERE ESSN=SSN AND PNO IN (SELECT PNO FROM WORKS_ON,EMPLOYEE WHERE ESSN=SSN AND SSN IN(SELECT E.SSN FROM EMPLOYEE E,WORKS_ON,PROJECT P WHERE PNO=P.PNUMBER AND E.SSN=ESSN AND (SELECT COUNT(*) FROM WORKS_ON WHERE ESSN=E.SSN)<=ALL(SELECT COUNT(*) FROM WORKS_ON,PROJECT WHERE PNO=PNUMBER AND P.DNUM=DNUM GROUP BY ESSN)));
+ERROR 1054 (42S22): Unknown column 'DNUM' in 'field list'
+
+mysql> SELECT FNAME,DNUM FROM EMPLOYEE,WORKS_ON,PROJECT WHERE ESSN=SSN AND PNO=PNUMBER AND PNO IN (SELECT PNO FROM WORKS_ON,EMPLOYEE WHERE ESSN=SSN AND SSN IN(SELECT E.SSN FROM EMPLOYEE E,WORKS_ON,PROJECT P WHERE PNO=P.PNUMBER AND E.SSN=ESSN AND (SELECT COUNT(*) FROM WORKS_ON WHERE ESSN=E.SSN)<=ALL(SELECT COUNT(*) FROM WORKS_ON,PROJECT WHERE PNO=PNUMBER AND P.DNUM=DNUM GROUP BY ESSN)));
++---------+------+
+| FNAME   | DNUM |
++---------+------+
+| Anjani  |    1 |
+| Sudheer |    1 |
+| Aneesh  |    1 |
+| Sai     |    1 |
+| Edward  |    1 |
+| Uzumaki |    3 |
+| Edward  |    3 |
+| Sai     |    4 |
+| Minato  |    4 |
+| Edward  |    4 |
++---------+------+
+10 rows in set (0.01 sec)
+
+mysql> exit
