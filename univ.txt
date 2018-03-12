@@ -1,0 +1,249 @@
+1)
+
+mysql> select day,start_hr,start_min,end_hr,end_min from course c,section s,time_slot t where s.time_slot_id=t.time_slot_id and s.course_id=c.course_id and c.title='Genetics';
++-----+----------+-----------+--------+---------+
+| day | start_hr | start_min | end_hr | end_min |
++-----+----------+-----------+--------+---------+
+| F   |        8 |         0 |      8 |      50 |
+| M   |        8 |         0 |      8 |      50 |
+| W   |        8 |         0 |      8 |      50 |
++-----+----------+-----------+--------+---------+
+3 rows in set (0.00 sec)
+
+
+2)
+
+
+mysql> select a.i_iD,count(*) from advisor a,instructor i,student s where a.i_ID=i.ID and s.ID = a.s_ID group by i.ID;
++-------+----------+
+| i_iD  | count(*) |
++-------+----------+
+| 10101 |        1 |
+| 22222 |        2 |
+| 45565 |        2 |
+| 76543 |        1 |
+| 76766 |        1 |
+| 98345 |        2 |
++-------+----------+
+6 rows in set (0.00 sec)
+  
+
+3)
+
+mysql> select * from takes t,student s where t.Id=s.Id and t.course_id='CS-101' order by s.dept_name,t.year,t.ID;
++-------+-----------+--------+----------+------+-------+-------+----------+------------+----------+
+| ID    | course_id | sec_id | semester | year | grade | ID    | name     | dept_name  | tot_cred |
++-------+-----------+--------+----------+------+-------+-------+----------+------------+----------+
+| 00128 | CS-101    | 1      | Fall     | 2009 | A     | 00128 | Zhang    | Comp. Sci. |      102 |
+| 12345 | CS-101    | 1      | Fall     | 2009 | C     | 12345 | Shankar  | Comp. Sci. |       32 |
+| 54321 | CS-101    | 1      | Fall     | 2009 | A-    | 54321 | Williams | Comp. Sci. |       54 |
+| 76543 | CS-101    | 1      | Fall     | 2009 | A     | 76543 | Brown    | Comp. Sci. |       58 |
+| 98765 | CS-101    | 1      | Fall     | 2009 | C-    | 98765 | Bourikas | Elec. Eng. |       98 |
+| 45678 | CS-101    | 1      | Fall     | 2009 | F     | 45678 | Levy     | Physics    |       46 |
+| 45678 | CS-101    | 1      | Spring   | 2010 | B+    | 45678 | Levy     | Physics    |       46 |
++-------+-----------+--------+----------+------+-------+-------+----------+------------+----------+
+7 rows in set (0.00 sec)
+
+
+4)
+
+
+mysql> select c.course_id,count(*) from course c, takes t where c.course_id=t.course_id group by c.course_id having count(*)>=all(select count(*) from course c, takes t where c.course_id=t.course_id group by c.course_id);
++-----------+----------+
+| course_id | count(*) |
++-----------+----------+
+| CS-101    |        7 |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> create view q3 as select c.course_id,count(*) from course c, takes t where c.course_id=t.course_id group by c.course_id having count(*)>=all(                                                                e_id group by c.course_id);
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> select max(c.capacity) from classroom c, q3 q, section s where q.course_id=s.course_id and s.building=c.building and s.room_number=c.room_number;
++-----------------+
+| max(c.capacity) |
++-----------------+
+|             500 |
++-----------------+
+1 row in set (0.00 sec)
+
+5)
+
+
+
+mysql> create view q5 as select t.time_slot_id,t.start_hr,t.day from time_slot t where t.time_slot_id not in(select time_slot_id from time_slot where start_hr=9 and start_min=0 and day='M' );
+Query OK, 0 rows affected (0.44 sec)
+
+mysql> select * from q5;
++--------------+----------+-----+
+| time_slot_id | start_hr | day |
++--------------+----------+-----+
+| A            |        8 | F   |
+| A            |        8 | M   |
+| A            |        8 | W   |
+| C            |       11 | F   |
+| C            |       11 | M   |
+| C            |       11 | W   |
+| D            |       13 | F   |
+| D            |       13 | M   |
+| D            |       13 | W   |
+| E            |       10 | R   |
+| E            |       10 | T   |
+| F            |       14 | R   |
+| F            |       14 | T   |
+| G            |       16 | F   |
+| G            |       16 | M   |
+| G            |       16 | W   |
+| H            |       10 | W   |
++--------------+----------+-----+
+17 rows in set (0.00 sec)
+
+mysql> select s.building,s.room_number from section s, q5 q where q.time_slot_id=s.time_slot_id and start_hr<>9 and day='M';
++----------+-------------+
+| building | room_number |
++----------+-------------+
+| Painter  | 514         |
+| Taylor   | 3128        |
+| Watson   | 120         |
+| Taylor   | 3128        |
+| Taylor   | 3128        |
+| Taylor   | 3128        |
+| Painter  | 514         |
+| Packard  | 101         |
+| Watson   | 100         |
++----------+-------------+
+9 rows in set (0.00 sec)
+
+6)
+
+
+mysql> select i.id,t.course_id from instructor i,teaches t where t.id=i.id and  salary=(select max(salary) from instructor i );
++-------+-----------+
+| id    | course_id |
++-------+-----------+
+| 22222 | PHY-101   |
++-------+-----------+
+1 row in set (0.00 sec)
+
+
+7)
+
+
+mysql> select d.dept_name,i.salary,i.Id from department d,instructor i where d.dept_name=i.dept_name and i.salary in (select min(salary) from instructor group by dept_name);
++------------+----------+-------+
+| dept_name  | salary   | Id    |
++------------+----------+-------+
+| Biology    | 72000.00 | 76766 |
+| Comp. Sci. | 65000.00 | 10101 |
+| Elec. Eng. | 80000.00 | 98345 |
+| Finance    | 80000.00 | 76543 |
+| History    | 60000.00 | 32343 |
+| Music      | 40000.00 | 15151 |
+| Physics    | 87000.00 | 33456 |
++------------+----------+-------+
+7 rows in set (0.00 sec)
+
+
+8)
+
+
+mysql> select dept_name,budget*0.1 as budget from department where budget=(select max(budget) from department);
++-----------+-----------+
+| dept_name | budget    |
++-----------+-----------+
+| Finance   | 12000.000 |
++-----------+-----------+
+1 row in set (0.00 sec)
+
+
+9)
+
+mysql> select  s.Id,s.name from student s,takes t where s.Id=t.Id and t.semester='Spring' and tot_cred=(select max(tot_cred) from student s,takes t where s.ID=t.Id and t.semester='Spring');
++-------+--------+
+| Id    | name   |
++-------+--------+
+| 23121 | Chavez |
++-------+--------+
+1 row in set (0.00 sec)
+
+11)
+
+
+mysql> select year from student s, takes t where s.id=t.id group by year having count(*)<=all(select count(*) from student s,takes t where s.id=t.id group by year);
++------+
+| year |
++------+
+| 2010 |
++------+
+1 row in set (0.00 sec)
+
+mysql> create view q11 as select year from student s, takes t where s.id=t.id group by year having count(*)<=all(select count(*) from student s,takes t where s.id=t.id group by year);
+Query OK, 0 rows affected (0.30 sec)
+
+mysql> select s.id,t.grade from student s,takes t,q11 q where t.id=s.id and t.year = q.year order by s.id;
++-------+-------+
+| id    | grade |
++-------+-------+
+| 12345 | A     |
+| 19991 | B     |
+| 23121 | C+    |
+| 45678 | B+    |
+| 45678 | B     |
+| 55739 | A-    |
+| 76543 | A     |
+| 98765 | B     |
+| 98988 | NULL  |
++-------+-------+
+9 rows in set (0.00 sec)
+
+12)
+
+mysql> select i.ID,i.name,t.course_id from teaches t, instructor i where i.ID=t.ID and i.dept_name='Comp. Sci.';
++-------+------------+-----------+
+| ID    | name       | course_id |
++-------+------------+-----------+
+| 10101 | Srinivasan | CS-101    |
+| 10101 | Srinivasan | CS-315    |
+| 10101 | Srinivasan | CS-347    |
+| 45565 | Katz       | CS-101    |
+| 45565 | Katz       | CS-319    |
+| 83821 | Brandt     | CS-190    |
+| 83821 | Brandt     | CS-190    |
+| 83821 | Brandt     | CS-319    |
++-------+------------+-----------+
+8 rows in set (0.00 sec)
+
+13)
+
+
+mysql> (select c.course_id from course c, section s where s.course_id=c.course_id and s.semester='Fall' and year=2009) union (select c.course_id from course c, section s where s.course_id=c.course_id and s.semester='Spring' and year=2009);
++-----------+
+| course_id |
++-----------+
+| CS-101    |
+| CS-347    |
+| PHY-101   |
+| CS-190    |
+| EE-181    |
++-----------+
+5 rows in set (0.00 sec)
+
+14)
+
+
+mysql> select i.id from instructor i,department d,classroom c where d.dept_name=i.dept_name and d.building=c.building and c.building='Taylor'; 
++-------+
+| id    |
++-------+
+| 10101 |
+| 45565 |
+| 83821 |
+| 98345 |
++-------+
+4 rows in set (0.00 sec)
+
+
+
+
+
+
