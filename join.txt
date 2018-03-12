@@ -1,0 +1,37 @@
+mysql> SELECT Fname , Lname , Address FROM ( EMPLOYEE  JOIN DEPT  ON Dno = Dnumber ) WHERE Dname ='Computer Engineering';
++---------+---------------+-----------+
+| Fname   | Lname         | Address   |
++---------+---------------+-----------+
+| Anjani  | Mantripragada | Hyderabad |
+| Sudheer | manukonda     | Tanuku    |
+| Pavan   | Thatavarthy   | Kavali    |
+| Aneesh  | Hiregange     | Kaiga     |
+| Sai     | Vallabhaneni  | Warangal  |
++---------+---------------+-----------+
+5 rows in set (0.00 sec)
+mysql> SELECT E.Fname AS Employee_name , S.Fname AS Supervisor_name FROM ( EMPLOYEE  AS E LEFT OUTER JOIN EMPLOYEE  AS S ON E.Superssn = S.Ssn );
++---------------+-----------------+
+| Employee_name | Supervisor_name |
++---------------+-----------------+
+| Anjani        | Uzumaki         |
+| Itachi        | Uzumaki         |
+| Shikamaru     | NULL            |
+| daada         | Anjani          |
+| Sudheer       | Uzumaki         |
+| Kaushik       | Sai             |
+| Pavan         | Uzumaki         |
+| Uzumaki       | Sai             |
+| Aneesh        | Uzumaki         |
+| Sai           | Uzumaki         |
+| Minato        | NULL            |
+| Edward        | Sai             |
++---------------+-----------------+
+12 rows in set (0.00 sec)
+mysql> SELECT Pnumber , Dnum , Lname , Address , Bdate FROM (( PROJECT  JOIN DEPT  ON Dnum = Dnumber ) JOIN EMPLOYEE  ON Mgrssn = Ssn ) WHERE Plocation ='Chennai';
++---------+------+-------------+---------+------------+
+| Pnumber | Dnum | Lname       | Address | Bdate      |
++---------+------+-------------+---------+------------+
+|       1 |    1 | Thatavarthy | Kavali  | 1999-05-28 |
++---------+------+-------------+---------+------------+
+1 row in set (0.00 sec)
+
