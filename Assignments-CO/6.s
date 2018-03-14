@@ -1,15 +1,17 @@
 mov r5,#102400
-zero: .word 0x80|0x40|0x20|0x08|0x04|0x01
+zero: .word 0x80|0x40|0x20|0x08|0x04|0x01	@ a buffer,'zero' of size 4 bytes 
+						@ value stored in the buffer,'zero' is 0xED(decimal equivalent of 237);
+
 loop:
 
 mov r1,#0
 loop1:
 add r1,r1,#1
 cmp r1,r5
-ldr r2,=zero
-ldr r0,[r2]
+ldr r2,=zero 	@r2 has adress of the buffer named 'zero'
+ldr r0,[r2]	@r0 has content of r2
 
-swi 0x200
+swi 0x200	@to make the 8 segment display glow corresponding to the content in r0
 BNE loop1
 
 
@@ -18,7 +20,7 @@ mov r1,#0
 loop2:
 add r1,r1,#1
 
-mov r0,#0x060
+mov r0,#0x060 @ corresponding hexadecimal code to make 1 appear on the display 
 swi 0x200
 cmp r1,r5
 BNE loop2
