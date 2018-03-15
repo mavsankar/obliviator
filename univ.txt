@@ -166,6 +166,35 @@ mysql> select  s.Id,s.name from student s,takes t where s.Id=t.Id and t.semester
 +-------+--------+
 1 row in set (0.00 sec)
 
+10)
+
+
+
+mysql> select course_id,sec_id,id,coalesce(name,'-') from section natural left outer join teaches natural left outer join instructor where semester='Spring' and year='2010';
++-----------+--------+-------+--------------------+
+| course_id | sec_id | id    | coalesce(name,'-') |
++-----------+--------+-------+--------------------+
+| CS-101    | 1      | 45565 | Katz               |
+| FIN-201   | 1      | 12121 | Wu                 |
+| MU-199    | 1      | 15151 | Mozart             |
+| HIS-351   | 1      | 32343 | El Said            |
+| CS-319    | 2      | 83821 | Brandt             |
+| CS-319    | 1      | 45565 | Katz               |
+| CS-315    | 1      | 10101 | Srinivasan         |
++-----------+--------+-------+--------------------+
+7 rows in set (0.0.00.     000000   0 11)
+
+
+
+
+
+
+
+
+sec
+
+
+
 11)
 
 
@@ -242,7 +271,176 @@ mysql> select i.id from instructor i,department d,classroom c where d.dept_name=
 +-------+
 4 rows in set (0.00 sec)
 
+15)*
 
+
+mysql> select  t.year,t.grade from student s,takes t where s.dept_name='Comp. Sci.' and t.ID=s.Id  group by t.grade,t.year having count(*)=1; +------+-------+
+| year | grade |
++------+-------+
+| 2009 | B+    |
+| 2009 | C     |
++------+-------+
+2 rows in set (0.00 sec)
+
+16)
+
+
+mysql> select c.course_id,t.semester,t.year from course c,takes t where c.course_id=t.course_id and t.year='2009' and t.semester='Fall' and c.course_id not in(select c.course_id from course c,takes t where c.course_id=t.course_id and t.year='2010' and t.semester='Spring');
++-----------+----------+------+
+| course_id | semester | year |
++-----------+----------+------+
+| CS-347    | Fall     | 2009 |
+| CS-347    | Fall     | 2009 |
+| PHY-101   | Fall     | 2009 |
++-----------+----------+------+
+3 rows in set (0.00 sec)
+
+
+17)
+mysql> create view q17 as select i.id as iid,i.name,t.id as tid,t.course_id,t.year,t.semester from instructor i,teaches t where i.name="Einstein" and t.id=i.id;
+Query OK, 0 rows affected (0.34 sec)
+
+mysql> select * from q17;
++-------+----------+-------+-----------+------+----------+
+| iid   | name     | tid   | course_id | year | semester |
++-------+----------+-------+-----------+------+----------+
+| 22222 | Einstein | 22222 | PHY-101   | 2009 | Fall     |
++-------+----------+-------+-----------+------+----------+
+1 row in set (0.00 sec)
+
+mysql> select s.id,s.name from student s,takes t,q17 q where s.id=t.id and t.year=q.year and t.course_id=q.course_id and t.semester=q.semester;
++-------+---------+
+| id    | name    |
++-------+---------+
+| 44553 | Peltier |
++-------+---------+
+1 row in set (0.00 sec)
+
+18)
+mysql> select distinct s.id,s.name from student s where exists(select * from takes t,course c where t.id=s.id and t.course_id=c.course_id and c.dept_name="Comp. Sci.");
++-------+----------+
+| id    | name     |
++-------+----------+
+| 00128 | Zhang    |
+| 12345 | Shankar  |
+| 45678 | Levy     |
+| 54321 | Williams |
+| 76543 | Brown    |
+| 98765 | Bourikas |
++-------+----------+
+6 rows in set (0.00 sec)
+
+19)
+mysql> select i.dept_name,i.id,i.salary from instructor i where i.salary>=ALL(select salary from instructor where dept_name=i.dept_name);
++------------+-------+----------+
+| dept_name  | id    | salary   |
++------------+-------+----------+
+| Finance    | 12121 | 90000.00 |
+| Music      | 15151 | 40000.00 |
+| Physics    | 22222 | 95000.00 |
+| History    | 58583 | 62000.00 |
+| Biology    | 76766 | 72000.00 |
+| Comp. Sci. | 83821 | 92000.00 |
+| Elec. Eng. | 98345 | 80000.00 |
++------------+-------+----------+
+7 rows in set (0.01 sec)
+
+
+
+
+
+20)
+
+
+mysql> select id,name,count(distinct sec_id) from instructor natural left outer join teaches group by id;
++-------+------------+------------------------+
+| id    | name       | count(distinct sec_id) |
++-------+------------+------------------------+
+| 10101 | Srinivasan |                      1 |
+| 12121 | Wu         |                      1 |
+| 15151 | Mozart     |                      1 |
+| 22222 | Einstein   |                      1 |
+| 32343 | El Said    |                      1 |
+| 33456 | Gold       |                      0 |
+| 45565 | Katz       |                      1 |
+| 58583 | Califieri  |                      0 |
+| 76543 | Singh      |                      0 |
+| 76766 | Crick      |                      1 |
+| 83821 | Brandt     |                      2 |
+| 98345 | Kim        |                      1 |
++-------+------------+------------------------+
+12 rows in set (0.01 sec)
+
+
+21)
+
+
+
+mysql> select i.id,i.name,(select count(distinct sec_id) from teaches where id=i.id   ) as no_of_sections_taught from instructor i;
++-------+------------+-----------------------+
+| id    | name       | no_of_sections_taught |
++-------+------------+-----------------------+
+| 10101 | Srinivasan |                     1 |
+| 12121 | Wu         |                     1 |
+| 15151 | Mozart     |                     1 |
+| 22222 | Einstein   |                     1 |
+| 32343 | El Said    |                     1 |
+| 33456 | Gold       |                     0 |
+| 45565 | Katz       |                     1 |
+| 58583 | Califieri  |                     0 |
+| 76543 | Singh      |                     0 |
+| 76766 | Crick      |                     1 |
+| 83821 | Brandt     |                     2 |
+| 98345 | Kim        |                     1 |
++-------+------------+-----------------------+
+12 rows in set (0.00 sec)
+
+
+22)mysql> select s.id from student s,takes t,course c where t.id=s.id and c.course_id=t.course_id and c.dept_name="Biology" group by s.id having count(*)=(select count(*) from course where dept_name="Biology");
+Empty set (0.01 sec)
+
+
+23)mysql> select * from student where tot_cred>=15 order by name;
++-------+----------+------------+----------+
+| ID    | name     | dept_name  | tot_cred |
++-------+----------+------------+----------+
+| 76653 | Aoi      | Elec. Eng. |       60 |
+| 98765 | Bourikas | Elec. Eng. |       98 |
+| 19991 | Brandt   | History    |       80 |
+| 76543 | Brown    | Comp. Sci. |       58 |
+| 23121 | Chavez   | Finance    |      110 |
+| 45678 | Levy     | Physics    |       46 |
+| 44553 | Peltier  | Physics    |       56 |
+| 55739 | Sanchez  | Music      |       38 |
+| 12345 | Shankar  | Comp. Sci. |       32 |
+| 98988 | Tanaka   | Biology    |      120 |
+| 54321 | Williams | Comp. Sci. |       54 |
+| 00128 | Zhang    | Comp. Sci. |      102 |
++-------+----------+------------+----------+
+12 rows in set (0.00 sec)
+
+24)
+mysql> select * from q24,teaches t where q24.id=t.id;
++-------+----------+-------+-----------+--------+----------+------+
+| id    | count(*) | ID    | course_id | sec_id | semester | year |
++-------+----------+-------+-----------+--------+----------+------+
+| 10101 |        3 | 10101 | CS-101    | 1      | Fall     | 2009 |
+| 10101 |        3 | 10101 | CS-315    | 1      | Spring   | 2010 |
+| 10101 |        3 | 10101 | CS-347    | 1      | Fall     | 2009 |
+| 83821 |        3 | 83821 | CS-190    | 1      | Spring   | 2009 |
+| 83821 |        3 | 83821 | CS-190    | 2      | Spring   | 2009 |
+| 83821 |        3 | 83821 | CS-319    | 2      | Spring   | 2010 |
++-------+----------+-------+-----------+--------+----------+------+
+6 rows in set (0.00 sec)
+
+25)
+mysql> select * from  classroom where capacity=(select max(capacity) from classroom);
++----------+-------------+----------+
+| building | room_number | capacity |
++----------+-------------+----------+
+| Packard  | 101         |      500 |
++----------+-------------+----------+
+1 row in set (0.00 sec)
 
 
 
