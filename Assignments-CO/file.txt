@@ -1,1 +1,0 @@
-The string is printed into the file 
